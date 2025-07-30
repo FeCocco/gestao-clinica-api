@@ -1,0 +1,15 @@
+# ARQUIVO DE EXEMPLO PARA CONFIGURAÇÃO DE DESENVOLVIMENTO
+# Para usar, renomeie este arquivo para 'application-dev.properties'
+# e preencha os valores necessários.
+
+server.port=8080
+
+spring.datasource.url=jdbc:mariadb://localhost:3306/SistemaAgendamento
+spring.datasource.username=UserAgendamento
+spring.datasource.password=[SUA_SENHA_LOCAL_AQUI] <-- IMPORTANTE
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+springdoc.swagger-ui.path=/swagger-ui.html
