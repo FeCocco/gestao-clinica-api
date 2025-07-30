@@ -21,12 +21,12 @@ public class User {
         this.nome = nome;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getSenha() {
@@ -49,7 +49,7 @@ public class User {
     private Long id;
 
     private String nome;
-    private String email;
+    private String cpf;
     private String senha;
 
     @Enumerated(EnumType.STRING)
