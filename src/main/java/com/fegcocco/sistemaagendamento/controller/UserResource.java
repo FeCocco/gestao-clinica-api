@@ -29,4 +29,8 @@ public class UserResource {
         return userRepository.save(user);
     }
 
+    @DeleteMapping("/usuarios")
+    public void deletarUsuario(@RequestBody User user){
+        userRepository.delete(user);
+    }
 }
