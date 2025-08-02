@@ -33,4 +33,9 @@ public class UserResource {
     public void deletarUsuario(@RequestBody User user){
         userRepository.delete(user);
     }
+
+    @PutMapping("/usuarios")
+    public User atualizarUsuario(@RequestBody User user){
+        return userRepository.save(user);
+    }
 }
