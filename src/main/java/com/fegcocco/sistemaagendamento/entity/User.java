@@ -45,13 +45,24 @@ public class User {
         this.role = role;
     }
 
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
+
+
     @Id @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
+
+    @Column(unique = true)
     private String cpf;
+
     private String senha;
 
     @Enumerated(EnumType.STRING)
     private Role role; // CLIENTE ou PROFISSIONAL
+
+    @Column(unique = true)
+    private String email;
 }
