@@ -1,6 +1,7 @@
 package com.fegcocco.sistemaagendamento.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "USUARIOS")
@@ -21,6 +22,10 @@ public class User {
         this.nome = nome;
     }
 
+    public String getTelefone() {return telefone;}
+
+    public void setTelefone(String telefone) {this.telefone = telefone;}
+
     public String getCpf() {
         return cpf;
     }
@@ -28,6 +33,10 @@ public class User {
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
+
+    public LocalDate getDataNascimento() { return dataNascimento; }
+
+    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
     public String getSenha() {
         return senha;
@@ -55,8 +64,12 @@ public class User {
 
     private String nome;
 
+    private String telefone;
+
     @Column(unique = true)
     private String cpf;
+
+    private LocalDate dataNascimento;
 
     private String senha;
 

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -49,6 +49,22 @@ public class UserController {
         } else {
             return ResponseEntity.status(401).body("E-mail ou senha inválidos.");
         }
+    }
+
+    @PutMapping("/usuarios/{id}")
+    public ResponseEntity<User> atualizarUsuario(@PathVariable Long id, @RequestBody Map<String, String> dadosAtualizacao) {
+        return userRepository.findById(id)
+                .map(usuarioExistente -> {
+                    String cpf = dadosAtualizacao.get("cpf");
+
+                    if (cpf != null && !cpf.isEmpty()) {
+                        usuarioExistente.setCpf(cpf);
+                    }
+
+                    User usuarioAtualizado = userRepository.save(usuarioExistente);
+                    return ResponseEntity.ok(usuarioAtualizado);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }
