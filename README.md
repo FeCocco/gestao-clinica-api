@@ -85,10 +85,10 @@ With the environment set up, you can start the application using the Maven Wrapp
 
 The application will be running at `http://localhost:8080`.
 
-## 📖 API Documentation (Swagger)
+## API Documentation (Swagger)
 
 With the application running, the interactive API documentation will be available in your browser. Access the following URL:
 
-👉 **http://localhost:8080/swagger-ui.html**
+ **http://localhost:8080/swagger-ui.html**
 
 There, you can see all available endpoints, their parameters, and responses, as well as test them directly from the interface.
