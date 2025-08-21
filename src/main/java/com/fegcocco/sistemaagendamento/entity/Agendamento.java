@@ -17,6 +17,7 @@ public class Agendamento {
     @ManyToOne
     private Servico servico;
 
-    private LocalDateTime dataHora;
+    private LocalDateTime inicio;
+    private LocalDateTime fim;
 }
 
