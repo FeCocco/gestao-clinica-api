@@ -1,14 +1,13 @@
 package com.fegcocco.sistemaagendamento.service;
 
-import com.fegcocco.sistemaagendamento.dto.AgendamentoResponseDTO;
 import com.fegcocco.sistemaagendamento.entity.Agendamento;
+import com.fegcocco.sistemaagendamento.entity.Role;
 import com.fegcocco.sistemaagendamento.repository.AgendamentoRepository;
+import com.fegcocco.sistemaagendamento.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AgendamentoService {
@@ -16,27 +15,44 @@ public class AgendamentoService {
     @Autowired
     private AgendamentoRepository agendamentoRepository;
 
-    public List<AgendamentoResponseDTO> buscarPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {
+    @Autowired
+    private UserRepository userRepository;
 
-        List<Agendamento> agendamentos = agendamentoRepository.findByInicioBetween(inicio, fim);
+    public Agendamento criarAgendamento(Agendamento agendamento) {
+        Long profissionalId = agendamento.getProfissional().getId();
 
-        return agendamentos.stream()
-                .map(this::converterParaDTO)
-                .collect(Collectors.toList());
+        //o usuário existe E TEM A ROLE CORRETA?
+        userRepository.findByIdAndRole(profissionalId, Role.PROFISSIONAL)
+                .orElseThrow(() -> new RuntimeException("Profissional não encontrado ou usuário não tem permissão para receber agendamentos."));
+
+        if (agendamento.getDataHoraInicio().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Não é possível agendar em datas passadas.");
+        }
+
+        List<Agendamento> conflitos = agendamentoRepository.findConflictingAppointments(
+                profissionalId,
+                agendamento.getDataHoraInicio(),
+                agendamento.getDataHoraFim()
+        );
+
+        if (!conflitos.isEmpty()) {
+            throw new RuntimeException("Horário indisponível. Já existe um agendamento para este período.");
+        }
+
+        return agendamentoRepository.save(agendamento);
     }
 
-    private AgendamentoResponseDTO converterParaDTO(Agendamento agendamento) {
+    public List<Agendamento> buscarAgendamentosDoMes(Long profissionalId, int ano, int mes) {
+        LocalDateTime inicioMes = LocalDateTime.of(ano, mes, 1, 0, 0);
+        LocalDateTime fimMes = inicioMes.plusMonths(1).minusNanos(1);
 
-        AgendamentoResponseDTO dto = new AgendamentoResponseDTO();
+        return agendamentoRepository.findByProfissionalIdAndDataHoraInicioBetween(profissionalId, inicioMes, fimMes);
+    }
 
-        dto.setId(agendamento.getId());
-
-        dto.setInicio(agendamento.getInicio());
-        dto.setFim(agendamento.getFim());
-
-        String Titulo = agendamento.getServico().getNome() + " - " + agendamento.getCliente().getNome();
-        dto.setNome(Titulo);
-
-        return dto;
+    public void cancelarAgendamento(Long agendamentoId) {
+        if (!agendamentoRepository.existsById(agendamentoId)) {
+            throw new RuntimeException("Agendamento não encontrado!");
+        }
+        agendamentoRepository.deleteById(agendamentoId);
     }
 }

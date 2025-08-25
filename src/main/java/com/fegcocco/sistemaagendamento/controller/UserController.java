@@ -1,6 +1,7 @@
 package com.fegcocco.sistemaagendamento.controller;
 
 import com.fegcocco.sistemaagendamento.dto.LoginDTO;
+import com.fegcocco.sistemaagendamento.entity.Role;
 import com.fegcocco.sistemaagendamento.entity.User;
 import com.fegcocco.sistemaagendamento.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,6 +28,12 @@ public class UserController {
     public ResponseEntity<Boolean> verificaEmail(@PathVariable(value = "email") String email) {
         Optional<User> user = userRepository.findByEmail(email);
         return ResponseEntity.ok(user.isPresent());
+    }
+
+    @GetMapping("/profissionais")
+    public ResponseEntity<List<User>> getProfissionais() {
+        List<User> profissionais = userRepository.findByRole(Role.PROFISSIONAL);
+        return ResponseEntity.ok(profissionais);
     }
 
     @PostMapping("/usuarios")
@@ -66,5 +74,4 @@ public class UserController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
-
 }

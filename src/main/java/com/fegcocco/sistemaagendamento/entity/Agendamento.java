@@ -3,8 +3,6 @@ package com.fegcocco.sistemaagendamento.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.sql.Time;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,14 +17,24 @@ public class Agendamento {
     @ManyToOne
     private User cliente;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profissional_id", nullable = false)
     private User profissional;
 
     @ManyToOne
     private Servico servico;
 
-    private LocalDateTime inicio;
-    private LocalDateTime fim;
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private LocalDateTime dataHoraInicio;
 
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private LocalDateTime dataHoraFim;
+
+    @Column(nullable = false)
+    private String nomeCliente;
 }
 
