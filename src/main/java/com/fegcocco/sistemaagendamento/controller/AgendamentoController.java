@@ -1,5 +1,6 @@
 package com.fegcocco.sistemaagendamento.controller;
 
+import com.fegcocco.sistemaagendamento.dto.AgendamentoResponseDTO;
 import com.fegcocco.sistemaagendamento.entity.Agendamento;
 import com.fegcocco.sistemaagendamento.service.AgendamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,12 @@ public class AgendamentoController {
     private AgendamentoService agendamentoService;
 
     @GetMapping("/profissional/{profissionalId}")
-    public ResponseEntity<List<Agendamento>> getAgendamentosDoMes(
+    public ResponseEntity<List<AgendamentoResponseDTO>> getAgendamentosDoMes(
             @PathVariable Long profissionalId,
             @RequestParam int ano,
             @RequestParam int mes) {
 
-        List<Agendamento> agendamentos = agendamentoService.buscarAgendamentosDoMes(profissionalId, ano, mes);
+        List<AgendamentoResponseDTO> agendamentos = agendamentoService.buscarAgendamentosDoMes(profissionalId, ano, mes);
         return ResponseEntity.ok(agendamentos);
     }
 
